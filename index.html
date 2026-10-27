@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>Zwei Welten – Telegram-Abenteuer</title>
+<style>
+:root{--bg:#0b1020;--panel:#151e31;--panel2:#1d2940;--gold:#f3c969;--text:#f4f5fb;--muted:#aeb8cc;--blue:#83c8ff;--green:#9be3b1}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#20304d 0,#0b1020 60%);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+main{max-width:760px;margin:auto;padding:18px 14px 48px}.hero{border:1px solid #354461;border-radius:22px;overflow:hidden;background:linear-gradient(140deg,#182641,#111827);box-shadow:0 18px 55px #0005}
+.art{height:190px;position:relative;overflow:hidden;background:linear-gradient(#101b34aa,#101b34aa),radial-gradient(circle at 50% 38%,#e5c36a55,transparent 18%),linear-gradient(160deg,#172a48,#080d19)}
+.moon{position:absolute;right:16%;top:20px;width:58px;height:58px;border-radius:50%;background:#f6dfa0;box-shadow:0 0 45px #f4ce7588}
+.mountain{position:absolute;bottom:-2px;width:0;height:0;border-left:180px solid transparent;border-right:180px solid transparent;border-bottom:125px solid #233c58}
+.mountain.m2{left:25%;border-left-width:230px;border-right-width:230px;border-bottom:160px solid #172a43}
+.mountain.m3{right:-80px;border-left-width:180px;border-right-width:180px;border-bottom:110px solid #304a64}
+.portal{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);width:78px;height:112px;border:4px solid #8ed7ff;border-radius:50% 50% 8px 8px;box-shadow:0 0 20px #69cfff, inset 0 0 25px #69cfff88}
+.hero-copy{padding:18px 20px 22px}.eyebrow{color:var(--gold);font-size:.76rem;text-transform:uppercase;letter-spacing:.16em;font-weight:800}
+h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.1;margin:.4rem 0 .65rem}h2{font-size:1.2rem;margin:0 0 10px}p{margin:.45rem 0;color:#d9e0ed}.muted{color:var(--muted);font-size:.9rem}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}.stat{background:#ffffff09;border:1px solid #ffffff16;border-radius:13px;padding:11px;text-align:center}.stat strong{display:block;font-size:1.25rem;color:var(--gold)}.stat span{font-size:.75rem;color:var(--muted)}
+.panel{margin-top:14px;padding:17px;border-radius:18px;background:linear-gradient(145deg,#18243a,#121a2a);border:1px solid #ffffff18}
+.badge{display:inline-block;border:1px solid #5c759a;color:var(--blue);padding:3px 8px;border-radius:99px;font-size:.75rem;margin-bottom:8px}
+button{width:100%;text-align:left;color:var(--text);background:#263751;border:1px solid #526987;border-radius:12px;padding:12px 14px;font:inherit;cursor:pointer;margin-top:9px;transition:.15s}
+button:hover{background:#314867;transform:translateY(-1px)}button.primary{background:linear-gradient(100deg,#b58a3c,#e5c36a);color:#161b28;border:0;font-weight:800;text-align:center}
+button:disabled{opacity:.5;cursor:not-allowed;transform:none}.row{display:flex;gap:8px}.row button{flex:1;text-align:center}.message{padding:12px 13px;background:#0d1524;border-left:3px solid var(--gold);border-radius:0 10px 10px 0;color:#e5eaf3;margin-top:10px}.notice{font-size:.82rem;color:var(--muted);margin-top:12px}.tag{display:inline-block;background:#ffffff10;border-radius:7px;padding:4px 7px;margin:3px;font-size:.8rem}
+input{width:100%;background:#0d1524;border:1px solid #425675;border-radius:10px;padding:11px;color:white;font:inherit;margin:5px 0 8px}
+footer{text-align:center;color:#8e9bb3;font-size:.78rem;padding:20px}
+@media(min-width:600px){.art{height:240px}.hero-copy{padding:24px 28px}.panel{padding:22px}}
+</style>
+</head>
+<body>
+<main>
+<section class="hero">
+  <div class="art" aria-label="Stilisierte Nachtlandschaft mit leuchtendem Portal">
+    <div class="moon"></div><div class="mountain"></div><div class="mountain m2"></div><div class="mountain m3"></div><div class="portal"></div>
+  </div>
+  <div class="hero-copy">
+    <div class="eyebrow">Ein Abenteuer für zwei</div>
+    <h1>Zwei Welten</h1>
+    <p>Ein geheimnisvolles Portal ist erwacht. Zwei Reisende, zwei Orte und eine Mission, die nur gemeinsam gelöst werden kann.</p>
+    <div class="stats">
+      <div class="stat"><strong id="xp">0</strong><span>Erfahrung</span></div>
+      <div class="stat"><strong id="chapter">1</strong><span>Kapitel</span></div>
+      <div class="stat"><strong id="items">0</strong><span>Fundstücke</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <span class="badge" id="missionBadge">MISSION 01 · DER ERSTE FUNKE</span>
+  <h2 id="sceneTitle">Das Licht im Wald</h2>
+  <p id="sceneText">Als die Nacht hereinbricht, leuchtet zwischen uralten Bäumen ein blaues Portal. Daneben liegt eine Metallkapsel. Auf ihrer Oberfläche sind zwei Symbole eingraviert: Sonne und Mond.</p>
+  <div id="choices">
+    <button onclick="choose('capsule')">🔎 Die Metallkapsel untersuchen</button>
+    <button onclick="choose('portal')">✨ Das Portal vorsichtig berühren</button>
+    <button onclick="choose('listen')">🌲 Erst die Umgebung beobachten</button>
+  </div>
+  <div id="result" class="message" hidden></div>
+  <button id="continue" class="primary" onclick="nextScene()" hidden>Mission fortsetzen →</button>
+  <p class="notice">Demo-Spiel: Der Fortschritt wird auf diesem Gerät gespeichert. Gemeinsame Synchronisierung zwischen zwei Geräten wird im nächsten technischen Schritt angebunden.</p>
+</section>
+
+<section class="panel">
+  <h2>🎒 Dein Inventar</h2>
+  <div id="inventory"><span class="muted">Noch keine Gegenstände gefunden.</span></div>
+</section>
+
+<section class="panel">
+  <h2>💌 Nachricht an deinen Mitspieler</h2>
+  <p class="muted">Schreibe eine Nachricht, die du später über den Bot an deinen Freund senden kannst.</p>
+  <input id="messageInput" maxlength="240" placeholder="Zum Beispiel: Ich habe ein Symbol entdeckt …">
+  <button onclick="saveMessage()">Nachricht lokal speichern</button>
+  <div id="savedMessage" class="message" hidden></div>
+</section>
+
+<section class="panel">
+  <h2>🧭 Spielstand</h2>
+  <p id="saveStatus" class="muted">Automatisches Speichern ist aktiv.</p>
+  <div class="row">
+    <button onclick="exportSave()">Spielstand exportieren</button>
+    <button onclick="resetGame()">Neu beginnen</button>
+  </div>
+  <p class="notice">Der Export ist eine Sicherungskopie, keine Live-Synchronisierung. Bitte nichts mit Magie verwechseln, was eigentlich eine Datenbank braucht.</p>
+</section>
+<footer>Prototyp 0.1 · Zwei Welten · Für zwei Spieler entwickelt</footer>
+</main>
+<script>
+const initial = {xp:0, chapter:1, items:[], scene:0, choices:[], message:""};
+let state = {...initial, ...(JSON.parse(localStorage.getItem("zweiWeltenSave")||"{}"))};
+const scenes = {
+  0: {
+    badge:"MISSION 01 · DER ERSTE FUNKE", title:"Das Licht im Wald",
+    text:"Als die Nacht hereinbricht, leuchtet zwischen uralten Bäumen ein blaues Portal. Daneben liegt eine Metallkapsel. Auf ihrer Oberfläche sind zwei Symbole eingraviert: Sonne und Mond.",
+    choices:[
+      ["capsule","🔎 Die Metallkapsel untersuchen","Du entdeckst eine winzige Karte und ein goldenes Zeichen. Auf der Rückseite steht: „Zwei Wege öffnen eine Tür.“","Sternenkarte"],
+      ["portal","✨ Das Portal vorsichtig berühren","Ein warmer Lichtblitz huscht über deine Hand. Das Portal reagiert auf dich und hinterlässt einen blauen Kristallsplitter.","Kristallsplitter"],
+      ["listen","🌲 Erst die Umgebung beobachten","Zwischen den Bäumen hörst du drei Töne. Du prägst sie dir ein und findest im Moos eine alte Münze.","Alte Münze"]
+    ]
+  },
+  1: {
+    badge:"MISSION 02 · DIE ZWEI SYMBOLE", title:"Eine Nachricht aus der Ferne",
+    text:"In deinem Fundstück erscheint eine neue Gravur. Sie verändert sich, als du näher an das Portal trittst: „Der Weg wird sichtbar, wenn zwei Reisende ihre Zeichen teilen.“ Dein Mitspieler muss nun seinen Hinweis entdecken.",
+    choices:[
+      ["share","🗝️ Deinen Hinweis teilen","Du notierst dein Symbol für den anderen Reisenden. Ein zweiter Lichtpunkt erscheint am Rand des Portals.","Geteiltes Zeichen"],
+      ["search","🧩 Nach einem zweiten Hinweis suchen","Unter einer Steinplatte findest du eine Rune. Sie passt zu deinem Fundstück, aber allein ergibt sie noch keinen Sinn.","Alte Rune"],
+      ["wait","🌙 Auf ein Signal warten","Das Portal pulsiert zweimal. Es scheint auf eine Antwort aus der anderen Welt zu warten.","Portal-Signal"]
+    ]
+  },
+  2: {
+    badge:"MISSION 03 · DER ÜBERGANG", title:"Die Tür zwischen den Welten",
+    text:"Die beiden Zeichen beginnen zu leuchten. Ein schmaler Pfad erscheint hinter dem Portal. Am Ende stehen drei Türen: eine aus Holz, eine aus Glas und eine aus schwarzem Stein.",
+    choices:[
+      ["wood","🌿 Die Holztür wählen","Hinter der Tür liegt ein Garten voller schwebender Lichter. Du findest einen Schlüssel für die nächste Etappe.","Gartenschlüssel"],
+      ["glass","🔷 Die Glastür wählen","Die Tür zeigt eine Erinnerung, die noch gar nicht geschehen ist. Ein Splitter der Zukunft bleibt zurück.","Zukunftssplitter"],
+      ["stone","🖤 Die Steintür wählen","Die Tür öffnet sich nur einen Spalt. Dahinter liegt eine Karte mit einem verborgenen Weg.","Schattenkarte"]
+    ]
+  }
+};
+function save(){localStorage.setItem("zweiWeltenSave",JSON.stringify(state));document.getElementById("saveStatus").textContent="Lokal gespeichert · "+new Date().toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"});renderStats();}
+function renderStats(){document.getElementById("xp").textContent=state.xp;document.getElementById("chapter").textContent=state.chapter;document.getElementById("items").textContent=state.items.length;document.getElementById("inventory").innerHTML=state.items.length?state.items.map(x=>`<span class="tag">${escapeHtml(x)}</span>`).join(""):'<span class="muted">Noch keine Gegenstände gefunden.</span>';if(state.message){document.getElementById("savedMessage").hidden=false;document.getElementById("savedMessage").textContent=state.message;}}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function renderScene(){let s=scenes[state.scene]||scenes[2];document.getElementById("missionBadge").textContent=s.badge;document.getElementById("sceneTitle").textContent=s.title;document.getElementById("sceneText").textContent=s.text;document.getElementById("choices").innerHTML=s.choices.map(c=>`<button onclick="choose('${c[0]}')">${c[1]}</button>`).join("");document.getElementById("result").hidden=true;document.getElementById("continue").hidden=true;}
+function choose(id){if(state.choices.includes(state.scene+":"+id))return;let s=scenes[state.scene]||scenes[2], c=s.choices.find(x=>x[0]===id);if(!c)return;state.choices.push(state.scene+":"+id);state.xp+=10;state.items.push(c[3]);document.getElementById("result").textContent=c[2]+" Du erhältst: "+c[3]+". (+10 Erfahrungspunkte)";document.getElementById("result").hidden=false;document.getElementById("choices").querySelectorAll("button").forEach(b=>b.disabled=true);document.getElementById("continue").hidden=false;save();}
+function nextScene(){state.scene=Math.min(state.scene+1,2);state.chapter=Math.min(state.scene+1,3);save();renderScene();}
+function saveMessage(){let v=document.getElementById("messageInput").value.trim();if(!v)return;state.message=v;save();renderStats();document.getElementById("messageInput").value="";}
+function exportSave(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="zwei-welten-spielstand.json";a.click();URL.revokeObjectURL(url);}
+function resetGame(){if(!confirm("Wirklich neu beginnen? Dein lokaler Spielstand wird gelöscht."))return;state={...initial,items:[],choices:[]};save();renderScene();}
+renderStats();renderScene();
+</script>
+</body></html>
